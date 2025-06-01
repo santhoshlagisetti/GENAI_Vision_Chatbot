@@ -7,7 +7,7 @@ load_dotenv()
 
 
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))  # Ensure you have set GOOGLE_API_KEY in your .env file
 
 model = genai.GenerativeModel("gemini-1.5-flash")
  
@@ -24,8 +24,9 @@ def get_gemini_response(input, image=None):
 st.set_page_config(page_title="Gemini 1.5 Vision Chatbot", page_icon=":robot_face:")
 st.title("Gemini 1.5 Vision Chatbot")
 st.write("Ask me anything about Gemini 1.5 Vision!")
-input = st.text_input("Enter your question here:")  
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+input = st.text_input("Enter your question here:", placeholder="Write a blog about this image")  
+
 
 image = None
 if uploaded_file:
@@ -42,6 +43,10 @@ if button:
     elif input :
         with st.spinner("Generating response..."):
             response = get_gemini_response(input)
+            st.write(response)
+    elif image:
+        with st.spinner("Generating response..."):
+            response = get_gemini_response(input = 'Write a Blog about this image', image=image)
             st.write(response)
     else:
         st.warning("Please enter a question or upload an image.")   
